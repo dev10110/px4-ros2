@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  px4:
+    build:
+      context: .
+      dockerfile: px4.Dockerfile
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /home/dasc3/.ssh/id_ed25519:/root/.ssh/id_ed25519
+      - /home/dasc3/devansh/px4_geometric/PX4-Autopilot:/root/src/PX4-Autopilot:rw
+    environment:
+      - DISPLAY=$DISPLAY
+      - LOCAL_USER_ID=1000
+    privileged: true
+    tty: true
+    network_mode: "host"
+    ports:
+      - 14570:14570/udp
+
+  ros2:
+    build:
+      context: .
+      dockerfile: ros2.Dockerfile 
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /home/dasc3/.ssh/id_ed25519:/root/.ssh/id_ed25519 
+      - /home/dasc3/devansh/px4_geometric/px4_msgs:/root/px4_ros_com_ros2/src/px4_msgs
+      - /home/dasc3/devansh/px4_geometric/px4_ros_com:/root/px4_ros_com_ros2/src/px4_ros_com
+      - /home/dasc3/devansh/px4_geometric/robot-framework:/root/px4_ros_com_ros2/src/robot-framework
+    environment:
+      - DISPLAY=$DISPLAY
+    privileged: true
+    tty: true
+    network_mode: "host" 
